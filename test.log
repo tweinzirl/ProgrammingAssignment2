@@ -1,0 +1,52 @@
+#pull down from git
+git clone git@github.com:tweinzirl/ProgrammingAssignment2.git
+
+source("cachematrix.R")
+
+#initialize
+test <- makeCacheMatrix( matrix(c(0,0,3,1,4,0,2,5,6),nrow=3,ncol=3) )
+
+#see that data has been set
+> test$get()
+     [,1] [,2] [,3]
+[1,]    0    1    2
+[2,]    0    4    5
+[3,]    3    0    6
+
+#see that that is no inverse stored
+> test$getinverse()
+NULL
+
+#calculate and cache the inverse
+> cacheColve(test)
+
+          [,1]       [,2]      [,3]
+[1,] -2.666667  0.6666667 0.3333333
+[2,] -1.666667  0.6666667 0.0000000
+[3,]  1.333333 -0.3333333 0.0000000
+
+#repeat to see inverse is cached
+> cacheSolve(test)
+getting cached data
+          [,1]       [,2]      [,3]
+[1,] -2.666667  0.6666667 0.3333333
+[2,] -1.666667  0.6666667 0.0000000
+[3,]  1.333333 -0.3333333 0.0000000
+
+#change source matrix to this inverse
+test$set( matrix(c(-2.667, 0.667, 0.333, -1.667, 0.667, 0, 1.333, -0.333, 0), 3,3) )
+
+#recalculate inverse, to recover initial matrix
+> cacheSolve(test)
+         [,1]          [,2]         [,3]
+[1,] 0.000000 -6.660506e-16  3.003003003
+[2,] 0.997006  3.991018e+00 -0.008991027
+[3,] 1.997006  4.991018e+00  5.997014979
+
+#see that this is also now cached
+> cacheSolve(test)
+getting cached data
+         [,1]          [,2]         [,3]
+[1,] 0.000000 -6.660506e-16  3.003003003
+[2,] 0.997006  3.991018e+00 -0.008991027
+[3,] 1.997006  4.991018e+00  5.997014979
